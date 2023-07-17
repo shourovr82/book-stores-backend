@@ -3,6 +3,9 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { BookService } from "./books.service";
+import pick from "../../../shared/pick";
+import { BooksFilterAbleFields } from "./books.contants";
+import { IBook } from "./books.interfaces";
 
 const addNewBookController = catchAsync(async (req: Request, res: Response) => {
   const { ...newBookData } = req.body;
@@ -18,7 +21,8 @@ const addNewBookController = catchAsync(async (req: Request, res: Response) => {
 });
 const getAllBooksController = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await BookService.getAllBooksService();
+    const filters = pick(req.query, BooksFilterAbleFields);
+    const result = await BookService.getAllBooksService(filters);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -67,10 +71,22 @@ const updateBookController = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMyBookController = catchAsync(async (req: Request, res: Response) => {
+  const token = (await req.headers?.authorization) as string;
+  console.log(token);
+  const result = await BookService.getMyBookService(token as string);
+  sendResponse<IBook[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All Books get Successfully",
+    data: result,
+  });
+});
 export const BooksController = {
   addNewBookController,
   getAllBooksController,
   getSingleBookController,
   deleteBookController,
   updateBookController,
+  getMyBookController,
 };

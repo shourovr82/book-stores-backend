@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export type IUser = {
   fullName: string;
@@ -6,4 +6,20 @@ export type IUser = {
   password: string;
 };
 
-export type UserModel = Model<IUser, Record<string, unknown>>;
+export type IUserExist = {
+  password: string;
+  email: string;
+  fullName: string;
+  _id: Types.ObjectId | undefined;
+};
+
+export type UserModel = {
+  isUserExist(
+    email: string
+  ): Promise<Pick<IUserExist, "_id" | "email" | "fullName" | "password">>;
+
+  isPasswordMatched(
+    givenPassword: string,
+    savedPassword: string
+  ): Promise<boolean>;
+} & Model<IUser>;
