@@ -42,7 +42,9 @@ const getAllBooksService = async (filters: BooksFilter): Promise<IBook[]> => {
   const whenConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await Books.find(whenConditions).sort({ createdAt: -1 });
+  const result = await Books.find(whenConditions)
+    .sort({ createdAt: -1 })
+    .populate("userId");
   return result;
 };
 

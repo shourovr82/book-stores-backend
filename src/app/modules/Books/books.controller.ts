@@ -45,6 +45,7 @@ const getSingleBookController = catchAsync(
     });
   }
 );
+
 const deleteBookController = catchAsync(async (req: Request, res: Response) => {
   const { bookId } = req.params;
   const result = await BookService.deleteBookService(bookId);

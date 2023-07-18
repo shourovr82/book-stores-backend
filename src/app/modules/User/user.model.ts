@@ -33,13 +33,11 @@ UserSchema.statics.isPasswordMatched = async function (
   givenPassword: string,
   savedPassword: string
 ): Promise<boolean> {
-  console.log(givenPassword, savedPassword, "from model");
   const isMatched = await bcrypt.compare(givenPassword, savedPassword);
   return isMatched;
 };
 
 UserSchema.pre("save", async function (next) {
-  ///hasing User Password
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_rounds)

@@ -38,19 +38,23 @@ export const BookSchema = new Schema<IBook, BookModel>(
     },
     publicationDate: {
       type: String,
+      required: true,
     },
     reviews: {
       type: [reviewsSchema],
     },
     email: {
       type: String,
+      required: true,
     },
     name: {
       type: String,
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Users",
+      required: true,
     },
   },
   {
